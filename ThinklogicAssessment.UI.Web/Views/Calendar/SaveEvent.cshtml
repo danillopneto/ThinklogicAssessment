@@ -1,0 +1,33 @@
+﻿@{
+    const string labelClass = "col-md-1";
+}
+
+<div class="container">    
+    <form asp-action="Save">
+        <div class="row">           
+            <h2>Adding an event:</h2>
+            <input name="Id" type="hidden" />
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Title</label>
+                <input name="Title" type="text" maxlength="255" required="required" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Start Date</label>
+                <input name="StartDate" type="date" required="required" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">End Date</label>
+                <input name="EndDate" type="date" required="required" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Location</label>
+                <input name="Location" type="text" maxlength="500" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Description</label>
+                <textarea name="Description"></textarea>
+            </div>
+            <button id="saveEventBtn" class="btn btn-primary col-md-1 " type="submit">Save Event</button>
+        </div>
+    </form>
+</div>
