@@ -14,7 +14,7 @@ It was spent 2h13min to do it.
 
 # Steps to run/debug the application
 
-1. Run the following commands to start RabbitMQ and MySQL:  
+1. Run the following commands to start SQL Server:  
     - `docker run --name sqlserver -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=DockerSql2019!" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU15-ubuntu-20.04`
 2. Open the solution with Visual Studio 
 3. Run the migrations with `update-database -context ApplicationContext`
