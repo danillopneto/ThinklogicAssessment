@@ -17,6 +17,8 @@ window.calendar = function ($el, model) {
     this.$elDescription = this.$el.find('[name="Description"]');
     this.$elEditEventBtn = this.$el.find('.editEventBtn');
 
+    this.$elDay = this.$el.find('.day');
+
     this._initialize();
 }
 
@@ -29,8 +31,36 @@ window.calendar.prototype = {
     _addEvents: function () {
         var _this = this;
 
-        _this.$elEditEventBtn.on('click', function (event) {
-            _this._editFired(event.currentTarget);
+        $(document).on('click', '.editEventBtn', function (e) {
+            _this._editFired(e.currentTarget);
+            _this._openChat(e.currentTarget);
+        });
+
+        _this.$elDay.on('click', function (event) {
+            _this._dayClicked(event.currentTarget);
+        });
+    },
+
+    _dayClicked: function (target) {
+        var _this = this;
+
+        $('.day').removeClass('selectedDay');
+        $(target).addClass('selectedDay');
+
+        var day = target.textContent;
+
+        $.ajax({
+            url: './GetEventsByDayAsync',
+            type: 'GET',
+            dataType: 'html',
+            cache: false,
+            beforeSend: function () {
+            },
+            data: {
+                day: day
+            }
+        }).done(function (result) {
+            _this.$el.find('.events-table').replaceWith(result);
         });
     },
 

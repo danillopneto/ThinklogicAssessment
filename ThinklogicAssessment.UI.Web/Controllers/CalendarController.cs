@@ -36,6 +36,15 @@ namespace ThinklogicAssessment.Controllers
             return View(events);
         }
 
+        [HttpGet("GetEventsByDayAsync")]
+        public async Task<IActionResult> GetEventsByDayAsync(int day)
+        {
+            var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, day);
+            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(date);
+
+            return PartialView("_Events", events);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SaveAsync(EventDto eventDto, CancellationToken ct)
         {

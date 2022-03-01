@@ -6,8 +6,11 @@
 }
 
 <div id="@idContainer">
-    @(Html.Partial("Events"))
-    @(Html.Partial("SaveEvent"))    
+    @(Html.Partial("_Calendar", DateTime.Now))
+    <hr />
+    @(Html.Partial("_Events"))
+    <hr />
+    @(Html.Partial("_SaveEvent"))    
 </div>
 @section Scripts {
     <script>
