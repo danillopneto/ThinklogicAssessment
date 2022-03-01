@@ -37,7 +37,7 @@ namespace ThinklogicAssessment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(EventDto eventDto, CancellationToken ct)
+        public async Task<IActionResult> SaveAsync(EventDto eventDto, CancellationToken ct)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace ThinklogicAssessment.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error trying to create a event: {event}.", eventDto?.Title);
+                _logger.LogError(ex, "Error trying to save an event: {event}.", eventDto?.Title);
                 throw;
             }
         }
