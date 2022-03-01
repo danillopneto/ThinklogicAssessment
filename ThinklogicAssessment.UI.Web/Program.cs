@@ -1,7 +1,17 @@
+using ThinklogicAssessment.CrossCutting;
+using ThinklogicAssessment.UseCases.Automappers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(typeof(EventProfile));
+
+builder.Services
+       .AddDatabaseConfiguration(builder.Configuration)
+       .AddRepositories()
+       .AddServices();
 
 var app = builder.Build();
 
