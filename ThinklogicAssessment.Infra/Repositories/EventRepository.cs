@@ -14,23 +14,23 @@ namespace ThinklogicAssessment.Infra.Repositories
             _applicationContext = applicationContext;
         }
 
-        public async Task<IEnumerable<Event>> GetEventsByDateAsync(DateTime date) => await _applicationContext.Events.Where(e => e.StartDate.Date == date.Date)
-                                                                                                                     .AsNoTracking()
-                                                                                                                     .ToListAsync();
+        public async Task<IEnumerable<Event>> GetEventsByDateAsync(DateTime date, CancellationToken ct) => await _applicationContext.Events.Where(e => e.StartDate.Date == date.Date)
+                                                                                                                                    .AsNoTracking()
+                                                                                                                                    .ToListAsync(ct);
 
-        public async Task SaveEventAsync(Event eventData)
+        public async Task SaveEventAsync(Event eventData, CancellationToken ct)
         {
-            var currentEvent = await _applicationContext.Events.FirstOrDefaultAsync(e => e.Id == eventData.Id);
+            var currentEvent = await _applicationContext.Events.FirstOrDefaultAsync(e => e.Id == eventData.Id, ct);
             if (currentEvent is null)
             {
-                await _applicationContext.Events.AddAsync(eventData);
+                await _applicationContext.Events.AddAsync(eventData, ct);
             }
             else
             {
                 currentEvent.UpdateInfo(eventData);
             }
 
-            await _applicationContext.SaveChangesAsync();
+            await _applicationContext.SaveChangesAsync(ct);
         }
     }
 }

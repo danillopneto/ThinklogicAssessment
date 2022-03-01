@@ -1,10 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-window.calendar = {};
-
-window.calendar = function ($el, model) {
+﻿window.calendar = function ($el, model) {
     this.$el = $el;
     this.$el.data('Calendar', this);
     this.model = model;
@@ -16,8 +10,6 @@ window.calendar = function ($el, model) {
     this.$elLocation = this.$el.find('[name="Location"]');
     this.$elDescription = this.$el.find('[name="Description"]');
     this.$elEditEventBtn = this.$el.find('.editEventBtn');
-
-    this.$elDay = this.$el.find('.day');
 
     this._initialize();
 }
@@ -33,31 +25,49 @@ window.calendar.prototype = {
 
         $(document).on('click', '.editEventBtn', function (e) {
             _this._editFired(e.currentTarget);
-            _this._openChat(e.currentTarget);
         });
 
-        _this.$elDay.on('click', function (event) {
-            _this._dayClicked(event.currentTarget);
+        $(document).on('onLoad', '.calendar-component', function (e, date) {
+            _this._dayClicked(date);
+        })
+        $(document).on('onDateSelected', '.calendar-component', function (e, date) {
+            _this._dayClicked(date);
+        })
+        $(document).on('onPreviousMonthClicked', '.calendar-component', function (e, date) {
+            _this._getCalendar(date, -1);
+        })
+        $(document).on('onNextMonthClicked', '.calendar-component', function (e, date) {
+            _this._getCalendar(date, +1)
+        })
+    },
+
+    _getCalendar: function (date, increment) {
+        var _this = this;
+
+        $.ajax({
+            url: './GetCalendarAsync',
+            type: 'POST',
+            dataType: 'html',
+            cache: false,
+            data: {
+                date: date,
+                increment: increment
+            }
+        }).done(function (result) {
+            _this.$el.find('.calendar-component').replaceWith(result);
         });
     },
 
-    _dayClicked: function (target) {
+    _dayClicked: function (date) {
         var _this = this;
-
-        $('.day').removeClass('selectedDay');
-        $(target).addClass('selectedDay');
-
-        var day = target.textContent;
 
         $.ajax({
             url: './GetEventsByDayAsync',
             type: 'GET',
             dataType: 'html',
             cache: false,
-            beforeSend: function () {
-            },
             data: {
-                day: day
+                date: date
             }
         }).done(function (result) {
             _this.$el.find('.events-table').replaceWith(result);

@@ -4,6 +4,6 @@ namespace ThinklogicAssessment.Interfaces.UseCases
 {
     public interface ISaveEventUseCase
     {
-        Task SaveEventAsync(EventDto eventDto);
+        Task SaveEventAsync(EventDto eventDto, CancellationToken ct);
     }
 }

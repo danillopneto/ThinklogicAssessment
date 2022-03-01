@@ -29,20 +29,34 @@ namespace ThinklogicAssessment.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? currentDate, CancellationToken ct)
         {
-            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(DateTime.Now);
-
-            return View(events);
+            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(currentDate ?? DateTime.Now, ct);
+            var model = new EventsDto { CurrentDate = currentDate, Events = events };
+            return View(model);
         }
 
         [HttpGet("GetEventsByDayAsync")]
-        public async Task<IActionResult> GetEventsByDayAsync(int day)
+        public async Task<IActionResult> GetEventsByDayAsync(DateTime date, CancellationToken ct)
         {
-            var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, day);
-            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(date);
+            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(date, ct);
 
             return PartialView("_Events", events);
+        }
+
+        [HttpPost("GetCalendarAsync")]
+        public IActionResult GetCalendarAsync(DateTime date, int increment)
+        {
+            try
+            {
+                var nextDate = date.AddMonths(increment);
+                return PartialView("_Calendar", nextDate);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error trying to get a calendar.");
+                throw;
+            }
         }
 
         [HttpPost]
@@ -50,9 +64,9 @@ namespace ThinklogicAssessment.Controllers
         {
             try
             {
-                await _saveEventUseCase.SaveEventAsync(eventDto);
+                await _saveEventUseCase.SaveEventAsync(eventDto, ct);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { currentDate = eventDto.StartDate });
             }
             catch (Exception ex)
             {

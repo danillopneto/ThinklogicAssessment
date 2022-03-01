@@ -4,6 +4,6 @@ namespace ThinklogicAssessment.Interfaces.UseCases
 {
     public interface IGetEventsByDateUseCase
     {
-        Task<IEnumerable<EventDto>> GetEventsByDateAsync(DateTime date);
+        Task<IEnumerable<EventDto>> GetEventsByDateAsync(DateTime date, CancellationToken ct);
     }
 }
