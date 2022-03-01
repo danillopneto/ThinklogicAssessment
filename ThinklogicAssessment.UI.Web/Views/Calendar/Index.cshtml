@@ -1,20 +1,68 @@
 ﻿@model IEnumerable<EventDto>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Thinklogic Assessment";
+    const string labelClass = "col-md-1";
 }
 
 <h1>Events for this day</h1>
 
 @if (Model != null && Model.Any())
 {
-    foreach (var eventData in Model)
-    {
-        <div>
-            <h2>@(eventData.Title)</h2>
-            <h3>@(eventData.StartDate.ToShortDateString()) - @(@eventData.EndDate.ToShortDateString())</h3>
-            <label>@(eventData.Location)</label>
-            <label>@(eventData.Description)</label>
-        </div>
-    }    
+    <table class="table highlight">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Start date</th>
+                <th scope="col">End date</th>
+                <th scope="col">Location</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var eventData in Model)
+            {
+                <tr>
+                    <td>@(eventData.Title)</td>
+                    <td>@(eventData.StartDate.ToShortDateString())</td>
+                    <td>@(@eventData.EndDate.ToShortDateString())</td>
+                    <td>@(eventData.Location)</td>
+                    <td>@(eventData.Description)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
+else
+{
+    <p>No events were found for this day.</p>
+}
+
+<div class="container">    
+    <form asp-action="Create">
+        <div class="row">           
+            <h2>Adding an event:</h2>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Title</label>
+                <input name="Title" type="text" maxlength="255" required="required" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Start Date</label>
+                <input name="StartDate" type="date" required="required" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">End Date</label>
+                <input name="EndDate" type="date" required="required" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Location</label>
+                <input name="Location" type="text" maxlength="500" />
+            </div>
+            <div class="col-md-12 form-group"> 
+                <label class="@labelClass">Description</label>
+                <textarea name="Description"></textarea>
+            </div>
+            <button class="btn btn-primary col-md-1" type="submit">Add Event</button>
+        </div>
+    </form>
+</div>

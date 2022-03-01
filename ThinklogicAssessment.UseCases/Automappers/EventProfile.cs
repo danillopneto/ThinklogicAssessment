@@ -8,7 +8,7 @@ namespace ThinklogicAssessment.UseCases.Automappers
     {
         public EventProfile()
         {
-            CreateMap<Event, EventDto>();
+            CreateMap<Event, EventDto>().ReverseMap();
         }
     }
 }
