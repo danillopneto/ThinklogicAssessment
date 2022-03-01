@@ -32,7 +32,6 @@ namespace ThinklogicAssessment.Infra.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)")
                         .HasComment("Description of the event.");
@@ -42,7 +41,6 @@ namespace ThinklogicAssessment.Infra.Migrations
                         .HasComment("End date of the event.");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
                         .HasComment("Location of the event.");
