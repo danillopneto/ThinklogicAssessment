@@ -1,8 +1,20 @@
-﻿@{
+﻿@model IEnumerable<EventDto>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Events for this day</h1>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var eventData in Model)
+    {
+        <div>
+            <h2>@(eventData.Title)</h2>
+            <h3>@(eventData.StartDate.ToShortDateString()) - @(@eventData.EndDate.ToShortDateString())</h3>
+            <label>@(eventData.Location)</label>
+            <label>@(eventData.Description)</label>
+        </div>
+    }    
+}

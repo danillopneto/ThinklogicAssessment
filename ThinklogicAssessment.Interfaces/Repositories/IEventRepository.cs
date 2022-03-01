@@ -4,7 +4,7 @@ namespace ThinklogicAssessment.Interfaces.Repositories
 {
     public interface IEventRepository
     {
-        Task<IEnumerable<Event>> GetEventsByDateAsync(DateOnly date);
+        Task<IEnumerable<Event>> GetEventsByDateAsync(DateTime date);
 
         Task SaveEventAsync(Event eventData);
     }

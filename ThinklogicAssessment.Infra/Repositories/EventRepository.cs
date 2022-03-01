@@ -14,7 +14,7 @@ namespace ThinklogicAssessment.Infra.Repositories
             _applicationContext = applicationContext;
         }
 
-        public async Task<IEnumerable<Event>> GetEventsByDateAsync(DateOnly date) => await _applicationContext.Events.Where(e => e.StartDate == date)
+        public async Task<IEnumerable<Event>> GetEventsByDateAsync(DateTime date) => await _applicationContext.Events.Where(e => e.StartDate == date)
                                                                                                                      .AsNoTracking()
                                                                                                                      .ToListAsync();
 
