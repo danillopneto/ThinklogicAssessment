@@ -6,7 +6,7 @@
 }
 
 <div id="@idContainer">
-    @(Html.Partial("_Calendar", Model.CurrentDate ?? DateTime.Now))
+    @(Html.Partial("CalendarComponent/_Calendar", Model.CurrentDate ?? DateTime.Now))
     <hr />
     @(Html.Partial("_Events", Model.Events))
     <hr />

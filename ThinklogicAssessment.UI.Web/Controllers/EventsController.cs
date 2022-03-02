@@ -4,21 +4,19 @@ using ThinklogicAssessment.Domain.Dtos;
 using ThinklogicAssessment.Interfaces.UseCases;
 using ThinklogicAssessment.Models;
 
-namespace ThinklogicAssessment.Controllers
+namespace ThinklogicAssessment.UI.Web.Controllers
 {
-    public class CalendarController : Controller
+    public class EventsController : ThinklogicBaseController<EventsController>
     {
         private readonly IGetEventsByDateUseCase _getEventsByDateUseCase;
 
-        private readonly ILogger<CalendarController> _logger;
-
         private readonly ISaveEventUseCase _saveEventUseCase;
 
-        public CalendarController(ILogger<CalendarController> logger,
-                                  IGetEventsByDateUseCase getEventsByDateUseCase,
-                                  ISaveEventUseCase saveEventUseCase)
+        public EventsController(ILogger<EventsController> logger,
+                                IGetEventsByDateUseCase getEventsByDateUseCase,
+                                ISaveEventUseCase saveEventUseCase)
+            : base(logger)
         {
-            _logger = logger;
             _getEventsByDateUseCase = getEventsByDateUseCase ?? throw new ArgumentNullException(nameof(getEventsByDateUseCase));
             _saveEventUseCase = saveEventUseCase ?? throw new ArgumentNullException(nameof(saveEventUseCase));
         }
@@ -42,21 +40,6 @@ namespace ThinklogicAssessment.Controllers
             var events = await _getEventsByDateUseCase.GetEventsByDateAsync(date, ct);
 
             return PartialView("_Events", events);
-        }
-
-        [HttpPost("GetCalendarAsync")]
-        public IActionResult GetCalendarAsync(DateTime date, int increment)
-        {
-            try
-            {
-                var nextDate = date.AddMonths(increment);
-                return PartialView("_Calendar", nextDate);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error trying to get a calendar.");
-                throw;
-            }
         }
 
         [HttpPost]

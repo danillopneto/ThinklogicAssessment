@@ -79,7 +79,6 @@ window.calendar.prototype = {
 
         var data = target.parentElement.parentElement.dataset.eventdata;
         var eventData = JSON.parse(data);
-        console.log(eventData);
 
         _this.$elId.val(eventData.Id);
         _this.$elTitle.val(eventData.Title);
