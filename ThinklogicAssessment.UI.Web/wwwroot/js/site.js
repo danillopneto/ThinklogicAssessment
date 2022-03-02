@@ -19,14 +19,12 @@ window.calendar.prototype = {
         this._addEvents();        
     },
 
-
     _addEvents: function () {
         var _this = this;
 
-        $(document).on('click', '.editEventBtn', function (e) {
-            _this._editFired(e.currentTarget);
+        $(document).on('onEventEditted', '.events-component', function (e, eventData) {
+            _this._editFired(eventData);
         });
-
         $(document).on('onLoad', '.calendar-component', function (e, date) {
             _this._dayClicked(date);
         })
@@ -70,15 +68,12 @@ window.calendar.prototype = {
                 date: date
             }
         }).done(function (result) {
-            _this.$el.find('.events-table').replaceWith(result);
+            _this.$el.find('.events-component').replaceWith(result);
         });
     },
 
-    _editFired: function (target) {
+    _editFired: function (eventData) {
         var _this = this;
-
-        var data = target.parentElement.parentElement.dataset.eventdata;
-        var eventData = JSON.parse(data);
 
         _this.$elId.val(eventData.Id);
         _this.$elTitle.val(eventData.Title);
