@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EventDto>
+﻿@model EventsDto
 
 @{
     ViewData["Title"] = "Thinklogic Assessment";
@@ -6,16 +6,16 @@
 }
 
 <div id="@idContainer">
-    @(Html.Partial("_Calendar", DateTime.Now))
+    @(Html.Partial("CalendarComponent/_Calendar", Model.CurrentDate ?? DateTime.Now))
     <hr />
-    @(Html.Partial("_Events"))
+    @(Html.Partial("_Events", Model.Events))
     <hr />
     @(Html.Partial("_SaveEvent"))    
 </div>
 @section Scripts {
     <script>
-        window.onload = function () {
+        window.addEventListener('load', function () {
             new calendar($('#@(idContainer)'));
-        };
+        });
     </script>
 }

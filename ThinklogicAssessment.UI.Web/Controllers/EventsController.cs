@@ -4,21 +4,19 @@ using ThinklogicAssessment.Domain.Dtos;
 using ThinklogicAssessment.Interfaces.UseCases;
 using ThinklogicAssessment.Models;
 
-namespace ThinklogicAssessment.Controllers
+namespace ThinklogicAssessment.UI.Web.Controllers
 {
-    public class CalendarController : Controller
+    public class EventsController : ThinklogicBaseController<EventsController>
     {
         private readonly IGetEventsByDateUseCase _getEventsByDateUseCase;
 
-        private readonly ILogger<CalendarController> _logger;
-
         private readonly ISaveEventUseCase _saveEventUseCase;
 
-        public CalendarController(ILogger<CalendarController> logger,
-                                  IGetEventsByDateUseCase getEventsByDateUseCase,
-                                  ISaveEventUseCase saveEventUseCase)
+        public EventsController(ILogger<EventsController> logger,
+                                IGetEventsByDateUseCase getEventsByDateUseCase,
+                                ISaveEventUseCase saveEventUseCase)
+            : base(logger)
         {
-            _logger = logger;
             _getEventsByDateUseCase = getEventsByDateUseCase ?? throw new ArgumentNullException(nameof(getEventsByDateUseCase));
             _saveEventUseCase = saveEventUseCase ?? throw new ArgumentNullException(nameof(saveEventUseCase));
         }
@@ -29,18 +27,17 @@ namespace ThinklogicAssessment.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? currentDate, CancellationToken ct)
         {
-            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(DateTime.Now);
-
-            return View(events);
+            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(currentDate ?? DateTime.Now, ct);
+            var model = new EventsDto { CurrentDate = currentDate, Events = events };
+            return View(model);
         }
 
         [HttpGet("GetEventsByDayAsync")]
-        public async Task<IActionResult> GetEventsByDayAsync(int day)
+        public async Task<IActionResult> GetEventsByDayAsync(DateTime date, CancellationToken ct)
         {
-            var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, day);
-            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(date);
+            var events = await _getEventsByDateUseCase.GetEventsByDateAsync(date, ct);
 
             return PartialView("_Events", events);
         }
@@ -50,9 +47,9 @@ namespace ThinklogicAssessment.Controllers
         {
             try
             {
-                await _saveEventUseCase.SaveEventAsync(eventDto);
+                await _saveEventUseCase.SaveEventAsync(eventDto, ct);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { currentDate = eventDto.StartDate });
             }
             catch (Exception ex)
             {

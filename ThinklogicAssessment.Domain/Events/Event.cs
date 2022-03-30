@@ -10,9 +10,9 @@ namespace ThinklogicAssessment.Domain.Events
 
         public string Title { get; set; }
 
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public void UpdateInfo(Event eventData)
         {

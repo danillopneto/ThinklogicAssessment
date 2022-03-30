@@ -19,10 +19,10 @@ namespace ThinklogicAssessment.UseCases.UseCases
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task SaveEventAsync(EventDto eventDto)
+        public async Task SaveEventAsync(EventDto eventDto, CancellationToken ct)
         {
             var eventData = _mapper.Map<Event>(eventDto);
-            await _eventRepository.SaveEventAsync(eventData);
+            await _eventRepository.SaveEventAsync(eventData, ct);
         }
     }
 }

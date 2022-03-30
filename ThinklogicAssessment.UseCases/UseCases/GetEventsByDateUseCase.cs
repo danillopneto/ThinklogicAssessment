@@ -18,9 +18,9 @@ namespace ThinklogicAssessment.UseCases.UseCases
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<EventDto>> GetEventsByDateAsync(DateTime date)
+        public async Task<IEnumerable<EventDto>> GetEventsByDateAsync(DateTime date, CancellationToken ct)
         {
-            var events = await _eventRepository.GetEventsByDateAsync(date);
+            var events = await _eventRepository.GetEventsByDateAsync(date, ct);
             return _mapper.Map<IEnumerable<EventDto>>(events);
         }
     }

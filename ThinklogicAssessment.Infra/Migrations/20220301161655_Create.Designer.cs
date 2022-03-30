@@ -12,7 +12,7 @@ using ThinklogicAssessment.Infra.Contexts;
 namespace ThinklogicAssessment.Infra.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220301135334_Create")]
+    [Migration("20220301161655_Create")]
     partial class Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,6 @@ namespace ThinklogicAssessment.Infra.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)")
                         .HasComment("Description of the event.");
@@ -44,7 +43,6 @@ namespace ThinklogicAssessment.Infra.Migrations
                         .HasComment("End date of the event.");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
                         .HasComment("Location of the event.");

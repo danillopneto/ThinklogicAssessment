@@ -16,11 +16,3 @@ html {
 body {
     margin-bottom: 60px;
 }
-
-.day {
-    cursor: pointer;
-}
-
-tr td.selectedDay {
-    background-color: #59b2ff;
-}

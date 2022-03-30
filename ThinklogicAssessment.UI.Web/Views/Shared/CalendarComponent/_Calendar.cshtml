@@ -1,0 +1,78 @@
+﻿@model DateTime
+
+@{
+    var firstDay = new DateTime(Model.Year, Model.Month, 1);
+    var daysInMonth = DateTime.DaysInMonth(Model.Year, Model.Month);
+    var currentDay = firstDay.Date;
+    var startsAt = firstDay.DayOfWeek;
+    var totalSlots = daysInMonth + (int)startsAt;
+    var idContainer = Guid.NewGuid().ToString("N");
+}
+
+<div id="@idContainer" class="calendar-component container" data-current-date="@(firstDay.ToShortDateString())">
+    <div class="row">
+        <div class="col-md-1">
+            <button id="previousMonthBtn" class="btn btn-secondary"><</button>
+        </div>
+        <div class="calendar-component-current-month col-md-10">
+            @(Model.ToString("MMMM/yyyy"))
+        </div>
+        <div class="col-md-1">
+            <button id="nextMonthBtn" class="btn btn-secondary">></button>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table highlight">
+            <thead>
+                <tr>
+                    @foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)).Cast<DayOfWeek>())
+                    {
+                        <th scope="col">@(dayOfWeek)</th>                        
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @for (int i = 0; i < totalSlots; i++)
+                    {
+                        if (i < (int)startsAt)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {                            
+                            if (i % 7 == 0 && i > 0)
+                            {
+                                @:</tr><tr>
+                            }
+                            <td data-current-date="@(currentDay.ToShortDateString())" class="day @(currentDay.Date == Model.Date ? "selectedDay" : string.Empty)" >@currentDay.Day</td>
+                            currentDay = currentDay.AddDays(1);                            
+                        }
+                    }
+                </tr>
+            </tbody>
+        </table>    
+    </div>
+</div>
+<script src="~/js/calendar.component.js" asp-append-version="true"></script>
+<script>
+    $('#@(idContainer)').ready(function () {
+        new calendarcomponent($('#@(idContainer)'));
+    });
+</script>
+<style>
+    .calendar-component-current-month {
+        line-height: 38px;
+        text-align: center;
+        text-transform: uppercase;
+        text-decoration: blue underline;
+    }    
+
+    .day {
+        cursor: pointer;
+    }
+
+    tr td.selectedDay {
+        background-color: #59b2ff;
+    }
+</style>

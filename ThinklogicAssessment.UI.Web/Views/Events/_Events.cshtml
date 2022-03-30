@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<EventDto>
 
-<div class="events-table">
+@{
+    var idContainer = Guid.NewGuid().ToString("N");
+}
+
+<div id="@idContainer" class="events-component">
     <h1>Events for this day</h1>
     @if (Model != null && Model.Any())
     {
@@ -34,4 +38,10 @@
     {
         <p>No events were found for this day.</p>
     }
+    <script src="~/js/events.component.js" asp-append-version="true"></script>
+    <script>
+        $('#@(idContainer)').ready(function () {
+            new eventscomponent($('#@(idContainer)'));
+        });
+    </script>
 </div>
